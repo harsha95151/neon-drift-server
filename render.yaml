@@ -1,0 +1,14 @@
+# Render Blueprint: New > Blueprint, point it at the repo containing this folder.
+services:
+  - type: web
+    name: neon-drift-server
+    runtime: node
+    plan: free            # free instances sleep after ~15 min without traffic (cold start ~30-60 s)
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: "https://neon-drift-racer.netlify.app,http://localhost:8820"
+      - key: NODE_VERSION
+        value: "20"

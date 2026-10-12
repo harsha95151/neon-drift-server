@@ -1,0 +1,17 @@
+# Fly.io (optional): fly launch --no-deploy --copy-config, then fly deploy. Uses the Dockerfile.
+app = "neon-drift-server"
+primary_region = "iad"
+[env]
+  PORT = "8080"
+  ALLOWED_ORIGINS = "*"
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  [[http_service.checks]]
+    method = "GET"
+    path = "/health"
+    interval = "30s"
+    timeout = "5s"

@@ -1,0 +1,14 @@
+{
+  "name": "neon-drift-server",
+  "version": "1.0.0",
+  "description": "Multiplayer room server for Neon Drift: City (WebSocket, in-memory rooms)",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/protocol-test.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "dependencies": { "ws": "^8.18.0" }
+}
