@@ -37,7 +37,7 @@ function send(ws, msg) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(m
 /* ---------------- rooms ---------------- */
 function roomView(r) {
   return { code: r.code, host: r.host, state: r.state, settings: r.settings,
-    players: [...r.players.values()].map((p) => ({ id: p.id, name: p.name, avatar: p.avatar, vehicle: p.vehicle, ready: p.ready, host: p.id === r.host, connected: !!p.ws, slot: p.slot })) };
+    players: [...r.players.values()].map((p) => ({ id: p.id, name: p.name, avatar: p.avatar, vehicle: p.vehicle, paint: p.paint || null, ready: p.ready, host: p.id === r.host, connected: !!p.ws, slot: p.slot })) };
 }
 function broadcast(r, msg, except) { const s = JSON.stringify(msg); for (const p of r.players.values()) if (p.ws && p !== except && p.ws.readyState === 1) p.ws.send(s); }
 function lobby(r) { broadcast(r, { t: 'lobby', room: roomView(r) }); }
@@ -126,6 +126,7 @@ function profile(p, m) {
   if ('name' in m) p.name = cleanName(m.name, p.name || 'Racer');
   if ('avatar' in m) p.avatar = pick(m.avatar, AVATARS, p.avatar || 'kaze');
   if ('vehicle' in m) p.vehicle = pick(m.vehicle, VEHICLES, p.vehicle || 'vandal');
+  if ('paint' in m) p.paint = typeof m.paint === 'string' && /^#[0-9a-f]{6}$/i.test(m.paint) ? m.paint.toLowerCase() : null;   // optional car colour
 }
 function joinRoom(ws, r, m) {
   // reconnect with a token -> reclaim the old slot
